@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="icon" type="image/png" href="../static/favicon-min.png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Utility Panel</title>
+    <style>
+      :root {
+        --green: #00ff9c;
+        --green-dark: #001d12;
+        --green-muted: #2fbf71;
+        --green-hover: #00b07d;
+        --blue: #00ffc3;
+        --red: #ff3c3c;
+        --red-dark: #a81919;
+        --background: #010d05;
+        --overlay: rgba(0, 0, 0, 0.9);
+        --border: #00ff9c;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Courier New", monospace;
+        background-color: var(--background);
+        color: var(--green);
+        text-align: center;
+      }
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
+      .modal {
+        margin: 60px auto;
+        background-color: var(--overlay);
+        border-radius: 15px;
+        max-width: 640px;
+        padding: 40px 30px;
+        box-shadow: 0 0 20px var(--green);
+        border: 2px solid var(--border);
+      }
+      .tabs {
+        display: flex;
+        justify-content: center;
+        margin: 20px 0 30px 0;
+        gap: 8px;
+      }
+      .tab {
+        padding: 10px 20px;
+        border: 1px solid var(--border);
+        background-color: rgba(0, 0, 0, 0.7);
+        cursor: pointer;
+        border-radius: 5px;
+        color: var(--green);
+      }
+      .tab.active {
+        background-color: var(--green);
+        color: #000;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      .form-group {
+        margin: 20px auto;
+        max-width: 400px;
+      }
+      input[type="text"],
+      input[type="file"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        background-color: var(--green-dark);
+        color: var(--green);
+      }
+      input:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--blue);
+        box-shadow: 0 0 8px var(--blue);
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: var(--green-muted);
+        opacity: 0.8;
+      }
+      button {
+        user-select: none;
+        pointer-events: auto;
+        transition: background-color 0.3s, opacity 0.3s;
+        margin-top: 5px;
+        padding: 10px 20px;
+        background-color: var(--green);
+        color: #000;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      button:disabled {
+        background-color: #004d39;
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+      button:hover:not(:disabled) {
+        background-color: var(--green-hover);
+      }
+      a {
+        color: var(--blue);
+      }
+      .loading {
+        font-style: italic;
+        color: var(--blue);
+      }
+      .success {
+        color: var(--green);
+        font-weight: bold;
+        pointer-events: none;
+        user-select: none;
+      }
+      .error {
+        color: var(--red);
+        font-weight: bold;
+        pointer-events: none;
+        user-select: none;
+      }
+      .spinner {
+          border: 8px solid #f3f3f3; /* Gri çerçeve */
+          border-top: 8px solid #3498db; /* Mavi üst çerçeve */
+          border-radius: 50%;
+          width: 50px;
+          height: 50px;
+          animation: spin 1s linear infinite;
+          margin: 20px auto; /* Ortalamak için */
+      }
+
+      @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <div class="modal">
+      <h1>Security Utility Panel</h1>
+      <div class="tabs">
+        <div class="tab active" onclick="showTab('urlTab')">Domain Check</div>
+        <div class="tab" onclick="showTab('fileTab')">PE Analysis</div>
+        <div class="tab" onclick="showTab('scraperTab')">Scraper Tool</div>
+      </div>
+
+      <div id="urlTab" class="tab-content active">
+        <form id="urlForm">
+          <div class="form-group">
+            <input
+              type="text"
+              id="urlInput"
+              name="url"
+              placeholder="example.com"
+              required
+              pattern="^([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}$"
+            />
+            <button type="submit">Check</button>
+          </div>
+          <p id="urlResult" style="pointer-events: none; user-select: none"></p>
+          <p id="urlDetailResult" style="pointer-events: none; user-select: none"></p>
+        </form>
+      </div>
+
+      <div id="fileTab" class="tab-content">
+        <p>
+          <strong>Supported formats:</strong> .exe, .dll<br />Upload Windows
+          Portable Executable files (PE) for static malware analysis.
+        </p>
+        <form id="fileForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <input
+              type="file"
+              id="fileInput"
+              name="file"
+              accept=".exe,.dll"
+              required
+            />
+            <button type="submit">Analyze</button>
+          </div>
+          <p id="fileResult"></p>
+        </form>
+      </div>
+
+      <div id="scraperTab" class="tab-content">
+        <p><a href="/static/download-scraper.exe" download>Download scraper.exe</a></p>
+        <div style="height: 20px;"></div>
+        <p><a href="/static/mac_scraper" download>Download scraper for mac</a></p>
+        <form id="scraperForm">
+          <div class="form-group">
+            <textarea
+              id="scraperInput"
+              placeholder="Paste scraper output here..."
+              required
+            ></textarea>
+            <button type="submit">Generate Password</button>
+          </div>
+          <div id="scraperResultContainer">
+              <div id="loader" class="spinner" style="display: none;"></div>
+              <ul id="scraperResult"></ul>
+              <div style="height: 20px;"></div>
+              <button id="downloadPasswords" style="display: none;">Download Passwords</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("canvas");
+      const context = canvas.getContext("2d");
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      canvas.width = W;
+      canvas.height = H;
+
+      const fontSize = 16;
+      const columns = Math.floor(W / fontSize);
+      const drops = Array(columns).fill(0);
+      const str = "01";
+
+      function draw() {
+        context.fillStyle = "rgba(0, 0, 0, 0.05)";
+        context.fillRect(0, 0, W, H);
+        context.font = fontSize + "px Courier New";
+        context.fillStyle =
+          getComputedStyle(document.documentElement).getPropertyValue(
+            "--green"
+          ) || "#00ff9c";
+
+        for (let i = 0; i < columns; i++) {
+          const index = Math.floor(Math.random() * str.length);
+          const x = i * fontSize;
+          const y = drops[i] * fontSize;
+          context.fillText(str[index], x, y);
+          if (y >= canvas.height && Math.random() > 0.99) drops[i] = 0;
+          drops[i]++;
+        }
+      }
+
+      setInterval(draw, 50);
+
+      function showTab(tabId) {
+        document
+          .querySelectorAll(".tab")
+          .forEach((tab) => tab.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((content) => content.classList.remove("active"));
+        document.getElementById(tabId).classList.add("active");
+        event.target.classList.add("active");
+      }
+
+      async function handleForm(formId, inputData, url, resultId) {
+        const resultP = document.getElementById(resultId);
+        resultP.className = "loading";
+        resultP.innerText = "Loading...";
+
+        try {
+          const res = await fetch(url, inputData);
+          const data = await res.json();
+          if(resultId === "urlResult"){
+            resultP.className =
+              data.result === "malicious" || data.result === "bad" || data.error
+                ? "error"
+                : "success";
+            resultP.innerText = data.result || data.password || data.error;
+          }else if(resultId === "fileResult"){
+              resultP.className =
+              data.result === "malicious" || data.result === "bad" || data.error
+                ? "error"
+                : "success";
+              resultP.innerText = data.result || data.password || data.error;
+          }else{
+            resultP.innerText = data.urlDetailResult;
+          }
+          
+        } catch (err) {
+          resultP.className = "error";
+          resultP.innerText = "An error occurred.";
+        }
+      }
+
+      document.getElementById("urlForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const url = document.getElementById("urlInput").value;
+        const payload = {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url }),
+        };
+        const button = document.querySelector("#urlForm button");
+        button.disabled = true;
+        handleForm("urlForm", payload, "/check-url", "urlResult").finally(
+          () => {
+            button.disabled = false;
+          }
+        );
+        handleForm("urlForm", payload, "/check-url", "urlDetailResult").finally(
+          () => {
+            button.disabled = false;
+          }
+        );
+      });
+
+      document.getElementById("fileForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const file = document.getElementById("fileInput").files[0];
+        const formData = new FormData();
+        formData.append("file", file);
+        const payload = {
+          method: "POST",
+          body: formData,
+        };
+        handleForm("fileForm", payload, "/scan-file", "fileResult");
+      });
+
+      let cachedPasswords = [];  // ← Global değişken, son gelen şifreleri tutar
+      let lastPasswordTry = ""
+      document.getElementById("scraperForm").addEventListener("submit", async (e) => {
+          e.preventDefault();
+          
+          const input = document.getElementById("scraperInput").value;
+          if (cachedPasswords.length > 0 && lastPasswordTry === input) {
+              //alert("Passwords already generated! Please download or refresh to regenerate.");
+              return;
+          }
+          lastPasswordTry = input;
+          const resultList = document.getElementById("scraperResult");
+          const downloadBtn = document.getElementById("downloadPasswords");
+          resultList.innerHTML = "";
+          downloadBtn.style.display = "none";
+
+          try {
+              loader.style.display = "block";
+              const response = await fetch("/generate-password", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ scraper_output: input }),
+              });
+
+              const data = await response.json();
+
+              if (response.ok) {
+                  cachedPasswords = data.passwords;  // ← Gelen listeyi kaydet
+                  const firstTen = cachedPasswords.slice(0, 10);
+                  firstTen.forEach(pw => {
+                      const li = document.createElement("li");
+                      li.textContent = pw;
+                      resultList.appendChild(li);
+                  });
+                  // Enable download button
+                  downloadBtn.style.display = "inline-block";
+              } else {
+                  const li = document.createElement("li");
+                  li.textContent = "Error: " + data.error;
+                  resultList.appendChild(li);
+              }
+          } catch (error) {
+              const li = document.createElement("li");
+              li.textContent = "Request failed: " + error;
+              resultList.appendChild(li);
+          } finally {
+              loader.style.display = "none"; // Yükleniyor ikonunu gizle
+          }
+      });
+
+      document.getElementById("downloadPasswords").addEventListener("click", () => {
+          if (cachedPasswords.length === 0) return;
+
+          const blob = new Blob([cachedPasswords.join("\n")], { type: "text/plain" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "passwords.txt";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          //URL.revokeObjectURL(url);
+      });
+    </script>
+  </body>
+</html>
+

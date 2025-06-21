@@ -1,0 +1,142 @@
+LinkedIn Pozisyon: Software Engineer
+LinkedIn Şirket: Yok
+LinkedIn Süre: Nov 2023 - Present · 1 yr 7 mos
+LinkedIn Lokasyon: İstanbul, Türkiye · Hybrid
+LinkedIn Açıklama: · Developed and maintained core banking applications for both customers and bank personnel, enhancing transaction efficiency and compliance.
+
+· Built and optimized Virtual POS systems, focusing on secure payment processing, field validation, and API integrations for seamless transactions.
+
+· Designed and implemented POS solutions with a focus on transaction security, reconciliation, and field validation to minimize errors and ensure accuracy.
+
+· Optimized database queries and caching strategies using Redis to reduce response times and improve transaction throughput.
+
+· Managed and optimized SQL Server databases, focusing on indexing, partitioning, and stored procedures to enhance data retrieval speed.
+
+· Enhanced ATM services by developing secure backend systems for cash management, transaction logging, and real-time processing.
+
+· Applied CQRS and Domain-Driven Design (DDD) using MediateR to build modular and maintainable architectures for banking applications.
+
+· Utilized RabbitMQ for asynchronous messaging to manage high-volume transactions efficiently and ensure reliable communication between services.
+
+· Worked within the BOA to integrate core banking modules, focusing on service-oriented architecture and inter-bank transactions.
+
+· Conducted security assessments and implemented OAuth2 and JWT to protect sensitive financial data in compliance with PCI DSS standards.
+
+· Managed CI/CD pipelines using Jenkins and Azure DevOps to automate testing, deployment, and delivery processes.
+
+· Practiced Agile methodologies through Scrum for task management and continuous improvement in development workflows.
+Skills: Back-End Web Development · Analitik · DevOps · C# · .NET
+LinkedIn Skills: Skills: Back-End Web Development · Analitik · DevOps · C# · .NET
+------------
+
+LinkedIn Pozisyon: Paycell
+LinkedIn Şirket: Yok
+LinkedIn Süre: İstanbul, Türkiye
+LinkedIn Lokasyon: İstanbul, Türkiye
+LinkedIn Açıklama: ·Designed and developed a dynamic E-Commerce platform and XCoin website, enabling users to seamlessly buy and sell their coins at real market prices.
+·Proactively identified and resolved technical issues, including bugs and performance bottlenecks, to improve the reliability and stability of software applications.
+·Developed unit tests for services which has written with Java - Spring Boot.
+·Gaining deep understanding of FinTech technologies.
+·Used Spring Boot, RESTApi, PostgreSQL, and postman for backend; angular, bootstrap, typescript and javascript for frontend.
+Skills: Rest API's · Java · Angular · Docker · Spring Framework · Git · SQL · Oracle Veritabanı · REST (Sunumsal Durum Aktarımı) · PostMan · Unit Test · Spring Boot · MySQL · RESTful WebServices
+·Gathered and analyzed user feedback to inform product decisions.
+·Developed clear objectives, KPIs, and targets to evaluate the app's performance.
+·Prioritized features and enhancements for the product roadmap based on user needs and business goals.
+·Utilized data analytics tools to derive insights and support data-driven decision-making.
+·Collaborated with cross-functional teams to ensure alignment and successful product launches.
+·Implemented agile methodologies for flexible and adaptive product development.
+Skills: Ürün Yönetimi · Ödemeler · Scrum · Kullanıcı Deneyimi · Agile Metotları · Finans · FinTech · Mobil Uygulamalar · Proje Yönetimi · Ürün Planlama · Ekip Yönetimi
+LinkedIn Skills: Skills: Rest API's · Java · Angular · Docker · Spring Framework · Git · SQL · Oracle Veritabanı · REST (Sunumsal Durum Aktarımı) · PostMan · Unit Test · Spring Boot · MySQL · RESTful WebServices
+------------
+
+LinkedIn Pozisyon: Backend Developer Intern
+LinkedIn Şirket: Yok
+LinkedIn Süre: Aug 2023 - Oct 2023 · 3 mos
+LinkedIn Lokasyon: Yok
+LinkedIn Açıklama: ·Designed and developed a dynamic E-Commerce platform and XCoin website, enabling users to seamlessly buy and sell their coins at real market prices.
+·Proactively identified and resolved technical issues, including bugs and performance bottlenecks, to improve the reliability and stability of software applications.
+·Developed unit tests for services which has written with Java - Spring Boot.
+·Gaining deep understanding of FinTech technologies.
+·Used Spring Boot, RESTApi, PostgreSQL, and postman for backend; angular, bootstrap, typescript and javascript for frontend.
+Skills: Rest API's · Java · Angular · Docker · Spring Framework · Git · SQL · Oracle Veritabanı · REST (Sunumsal Durum Aktarımı) · PostMan · Unit Test · Spring Boot · MySQL · RESTful WebServices
+LinkedIn Skills: Skills: Rest API's · Java · Angular · Docker · Spring Framework · Git · SQL · Oracle Veritabanı · REST (Sunumsal Durum Aktarımı) · PostMan · Unit Test · Spring Boot · MySQL · RESTful WebServices
+------------
+
+LinkedIn Pozisyon: Product Management Intern
+LinkedIn Şirket: Yok
+LinkedIn Süre: Nov 2022 - Aug 2023 · 10 mos
+LinkedIn Lokasyon: Yok
+LinkedIn Açıklama: ·Gathered and analyzed user feedback to inform product decisions.
+·Developed clear objectives, KPIs, and targets to evaluate the app's performance.
+·Prioritized features and enhancements for the product roadmap based on user needs and business goals.
+·Utilized data analytics tools to derive insights and support data-driven decision-making.
+·Collaborated with cross-functional teams to ensure alignment and successful product launches.
+·Implemented agile methodologies for flexible and adaptive product development.
+Skills: Ürün Yönetimi · Ödemeler · Scrum · Kullanıcı Deneyimi · Agile Metotları · Finans · FinTech · Mobil Uygulamalar · Proje Yönetimi · Ürün Planlama · Ekip Yönetimi
+LinkedIn Skills: Skills: Ürün Yönetimi · Ödemeler · Scrum · Kullanıcı Deneyimi · Agile Metotları · Finans · FinTech · Mobil Uygulamalar · Proje Yönetimi · Ürün Planlama · Ekip Yönetimi
+------------
+
+LinkedIn Pozisyon: Software Engineer Intern
+LinkedIn Şirket: Yok
+LinkedIn Süre: Aug 2022 - Sep 2022 · 2 mos
+LinkedIn Lokasyon: Yok
+LinkedIn Açıklama: ·Studied Robotic Process Automation (RPA).
+·Learned and applied Image Processing with Python and OpenCV.
+·Developed scripts to speed up process of completing various tasks.
+·Tested coded program routines and made revisions to eliminate errors.
+·Developed RPA which process image and do defined jobs.
+Skills: Robotic Process Automation (RPA) · Python (Programming Language)
+LinkedIn Skills: Skills: Robotic Process Automation (RPA) · Python (Programming Language)
+------------
+
+LinkedIn Pozisyon: Mobile Application Developer
+LinkedIn Şirket: Yok
+LinkedIn Süre: Sep 2020 - Aug 2022 · 2 yrs
+LinkedIn Lokasyon: Gebze, Kocaeli, Türkiye
+LinkedIn Açıklama: - Developed a mobile application using the Flutter framework, ensuring compatibility with both iOS and Android platforms. The app integrated Firebase for user authentication, notification services, and database management, alongside RESTful API implementations and real-time data updates for optimized performance.
+
+- The application provided a centralized platform for school events, club activities, and peer communication, enhancing student engagement and improving access to university-related information.
+
+- Throughout the project, I improved my teamwork, communication, and problem-solving skills while adopting a user-centric approach to effectively implement technical solutions.
+Skills: Back-End Web Development · flutter · firebase · Mobil Uygulama Geliştirme · Proje Yönetimi
+LinkedIn Skills: Skills: Back-End Web Development · flutter · firebase · Mobil Uygulama Geliştirme · Proje Yönetimi
+------------
+
+LinkedIn Pozisyon: Freelance Software Engineer
+LinkedIn Şirket: Yok
+LinkedIn Süre: Sep 2020 - Aug 2022 · 2 yrs
+LinkedIn Lokasyon: İstanbul, Türkiye · Remote
+LinkedIn Açıklama: - During my time as a freelancer on Fiverr.com, I had the opportunity to take on more than 10 different projects and successfully deliver them with an average rating of 5 stars. In each case, I was able to work closely with my clients to understand their needs, develop a clear project plan, and deliver high-quality work on time and on budget. This required me to demonstrate strong organizational skills, a keen attention to detail, and an ability to communicate effectively with clients from diverse backgrounds and with varying levels of technical expertise.
+
+- In total, I worked with individuals from 5different countries, each with their own unique perspective and approach to problem-solving. This experience helped me to develop a greater appreciation for the value of diversity and cultural exchange, and taught me how to adapt my communication style and work approach to accommodate different expectations and norms.
+
+- I primarily utilized my skills in programming languages such as C, C++, Java, and Python. Additionally, working on Fiverr.com allowed me to stay up-to-date with the latest tools and technologies in the industry, and to constantly hone my skills and deepen my knowledge of programming and software development.
+LinkedIn Skills: Yok
+------------
+
+LinkedIn Pozisyon: Assistant
+LinkedIn Şirket: Yok
+LinkedIn Süre: Oct 2020 - Jul 2022 · 1 yr 10 mos
+LinkedIn Lokasyon: Yok
+LinkedIn Açıklama: 
+LinkedIn Skills: Yok
+------------
+
+Twitter İsim: jack
+Twitter Bio: no state is the best state
+Twitter Lokasyon: Yok
+Twitter Website: Yok
+Twitter Katılım: Joined March 2006
+Twitter Takipçi: Yok
+Twitter Takip Edilen: Yok
+Twitter Son Tweet: We reject: kings, presidents, and voting.
+We believe in: rough consensus and running code.
+
+—David Clark, 1992
+Instagram Kullanıcı Adı: instagram
+Instagram Ad: Instagram
+Instagram Bio: Discover what's new on Instagram 🔎✨
+Instagram Website: http://help.instagram.com/
+Instagram Takipçi: 689054918
+Instagram Takip Edilen: 191
+Instagram Gönderi Sayısı: 8029
