@@ -1,0 +1,7 @@
+test_home: OK
+test_scan_file_valid: OK
+test_scan_file_empty: OK
+test_check_url_valid: OK
+test_check_url_missing: OK
+test_generate_password_valid: OK
+test_generate_password_missing: OK

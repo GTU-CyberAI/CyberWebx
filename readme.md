@@ -31,7 +31,8 @@ This project is organized into a logical directory structure to separate concern
 | ↳ `/scraper-for-mac-windows` | **Local OSINT Scraper:** Contains the source code for the standalone GUI application built with Tkinter. It runs independently of the web server to scrape data from local sources or the web, which is then used for password generation. `guimain.py` is likely the entry point. |
 | ↳ `/static` | **Frontend Assets:** Standard Flask directory for all static files that are served directly to the client's browser, such as CSS stylesheets, JavaScript files, and images. |
 | ↳ `/templates` | **HTML Views:** Standard Flask directory containing all Jinja2 HTML templates. These files are rendered by Flask to create the web pages a user sees, such as the main dashboard, upload forms, and results pages. |
-| **`/tests`** | **Testing Directory:** It holds the PNG screenshots used in this README for demonstration purposes. |
+| **`/tests`** | **Testing API's:** It holds the PNG screenshots used in this README for demonstration purposes. |
+| **`/tests`** | **Testing Directory:** Contains automated integration tests (`test_runner.py`) that send requests to the live Flask server and verify key endpoints such as `/`, `/scan-file`, `/check-url`, and `/generate-password`. Results are saved to `run-result.txt`.|
 | `requirements.txt` | **Project Dependencies:** This critical file lists all the Python packages required to run the project (e.g., `flask`, `scikit-learn`, `pandas`). It allows anyone to create an identical environment using `pip install -r requirements.txt`. |
 | `Procfile` | **Deployment Configuration:** A file used by cloud hosting platforms like Heroku to understand how to run the application. It typically contains a command like `web: gunicorn app:app`. |
 | `.gitignore` | **Version Control Exclusions:** Specifies files and directories that Git should ignore, such as `__pycache__`, virtual environment folders (`venv/`), and sensitive credential files. |
@@ -148,9 +149,16 @@ If you encounter issues, refer to the common problems and solutions below.
 
 ---
 
+### 🎯 Goals & Use Cases
+- Demonstrate ML usage in malware and phishing detection
+- Provide local OSINT-based password generation
+- Show Flask API modularity with frontend + backend integration
+
+---
+
 ## 🤝 Acknowledgements
 
-This project was developed as part of the coursework for the **[Enter Course Name Here]** course, under the instruction of **[Enter Instructor's Name Here]**.
+This project was developed as part of the coursework for the **CSE 473 - Network And Information Security** course, under the instruction of **Dr. Salih Sarp**.
 
 * **Lead Developers & Collaborators:**
     * Ahmet Yiğit (a.yigit2020@gtu.edu.tr)
