@@ -158,7 +158,7 @@ If you encounter issues, refer to the common problems and solutions below.
 
 ## 🤝 Acknowledgements
 
-This project was developed as part of the coursework for the **CSE 473 - Network And Information Security** course, under the instruction of **Dr. Salih Sarp**.
+This project was developed as part of the coursework for the **CSE 473 - Network And Information Security** course, under the instruction of **Dr. Öğr. Üyesi Salih Sarp**.
 
 * **Lead Developers & Collaborators:**
     * Ahmet Yiğit (a.yigit2020@gtu.edu.tr)
