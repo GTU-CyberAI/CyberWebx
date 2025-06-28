@@ -18,6 +18,12 @@ app = Flask(__name__)
 
 GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 GEMINI_API_KEY = "AIzaSyAUY3fsceC1KKoJbdWINFSf9K5TcdqaoY8"
+
+# sanitization fonksiyonu, bir URL string'ini alt parçalara ayırarak temizler
+# - Büyük harfleri küçültür, '/' ve '-' ile ayırır
+# - '.' ile ayrılan alt alanları da token olarak toplar
+# - 'com' gibi genel alanları dışarıda bırakır
+# Bu token'lar, URL analiz modelinde özellik olarak kullanılmak üzere hazırlanır
 # === URL Scanner Setup ===
 def sanitization(web):
     web = web.lower()
@@ -41,6 +47,12 @@ url_model = joblib.load("Classifier/url_model.pkl")
 # Whitelist of known good domains
 WHITELIST = {'hackthebox.eu', 'root-me.org', 'gmail.com'}
 
+# /check-url endpoint'i POST isteği ile gelen URL'yi alır
+# - Öncelikle JSON body'sinde 'url' olup olmadığını kontrol eder
+# - Eğer URL whitelist'te varsa doğrudan 'good' sonucunu döner
+# - Model ile tahmin yapılır (good / bad)
+# - Eğer URL kötü niyetli (bad) olarak algılanırsa, Gemini API'ye istek atarak açıklama alınır
+# - Sonuç JSON olarak döndürülür (url, result ve varsa açıklama)
 @app.route('/check-url', methods=['POST'])
 def check_url():
     data = request.get_json()
@@ -104,6 +116,11 @@ malware_model = MalwareModel(
     scaler_path='Classifier/scaler.pkl'
 )
 
+# /scan-file endpoint'i, kullanıcıdan gelen dosyayı alır ve PE analizine tabi tutar
+# - Gelen dosya UUID ile isimlendirilip kaydedilir
+# - Sistem işletim sistemi belirlenir ve uygun analiz fonksiyonu çağrılır (Windows veya Linux/macOS)
+# - Model tahmini alınarak JSON çıktısı döner (filename ve result)
+# - Tarama sonrası geçici dosyalar ve analiz çıktıları temizlenir
 @app.route('/scan-file', methods=['POST'])
 def scan_file():
     if 'file' not in request.files:
@@ -137,7 +154,11 @@ def scan_file():
             if os.path.exists(temp):
                 os.remove(temp)
 
-
+# /generate-password endpoint'i, kullanıcıdan gelen sosyal medya bilgilerine göre parola üretir
+# - JSON body'sinden 'scraper_output' alınır
+# - Bu içerik, Gemini API'ye gönderilerek 500 güçlü parola oluşturulması istenir
+# - Gelen yanıt satır satır ayrılır ve sadece parolalar liste olarak döndürülür
+# - Her bir parola ayrı bir satırda, açıklama veya başlık olmadan sunulur
 @app.route('/generate-password', methods=['POST'])
 def generate_password():
     data = request.get_json()
@@ -192,11 +213,16 @@ def generate_password():
 
     except (KeyError, IndexError) as e:
         return jsonify({'error': 'Invalid response from Gemini API', 'details': str(e)}), 500
+
+# Ana dizin (/) için endpoint
+# - index.html dosyasını render eder (görsel arayüz sayfası)
 # === Default route ===
 @app.route('/')
 def home():
     return render_template('index.html')  
 
+# Flask uygulamasını debug modunda başlatır
+# Bu blok, script doğrudan çalıştırıldığında geçerlidir (örneğin terminalden python app.py)
 # === Run server ===
 if __name__ == '__main__':
     app.run(debug=True)

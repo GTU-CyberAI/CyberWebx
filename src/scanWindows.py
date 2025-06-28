@@ -1,15 +1,19 @@
-import pefile
+# Gerekli kütüphaneler içe aktarılıyor
+import pefile # PE (Portable Executable) dosyalarını analiz etmek için
 import os
-import hashlib
+import hashlib  # Dosyanın hash'ini almak için
 import array
 import math
-import model as ml_model
+import model as ml_model  # Model işlemleri için kendi yazdığın "model.py"
 import pandas as pd
-from model import MalwareModel
+from model import MalwareModel  # Sınıf bazlı model sınıfı
 
+# Modelin beklediği özellik isimleri
 COLUMNS = [
+    # Dosya ismi ve md5 hash
     "Name",
     "md5",
+    # PE Header bilgileri
     "Machine",
     "SizeOfOptionalHeader",
     "Characteristics",
@@ -41,6 +45,7 @@ COLUMNS = [
     "SizeOfHeapCommit",
     "LoaderFlags",
     "NumberOfRvaAndSizes",
+    # Section sayısı ve istatistikleri
     "SectionsNb",
     "SectionsMeanEntropy",
     "SectionsMinEntropy",
@@ -51,10 +56,12 @@ COLUMNS = [
     "SectionsMeanVirtualsize",
     "SectionsMinVirtualsize",
     "SectionMaxVirtualsize",
+    # Import/Export bilgileri
     "ImportsNbDLL",
     "ImportsNb",
     "ImportsNbOrdinal",
     "ExportNb",
+    # Resource bilgileri
     "ResourcesNb",
     "ResourcesMeanEntropy",
     "ResourcesMinEntropy",
@@ -62,11 +69,13 @@ COLUMNS = [
     "ResourcesMeanSize",
     "ResourcesMinSize",
     "ResourcesMaxSize",
+    # Diğer bilgiler
     "LoadConfigurationSize",
     "VersionInformationSize"
 ]
 
 
+# Dosyanın md5 hash'ini hesaplar
 def get_md5(fname):
     hash_md5 = hashlib.md5()
     with open(fname, "rb") as f:
@@ -75,6 +84,7 @@ def get_md5(fname):
     return hash_md5.hexdigest()
 
 
+# Verilen veri (byte array) için entropi hesaplar
 def get_entropy(data):
     if len(data) == 0:
         return 0.0
@@ -91,6 +101,7 @@ def get_entropy(data):
     return entropy
 
 
+# PE dosyasındaki resource'ları alır ve entropi ile birlikte döner
 def get_resources(pe):
     resources = []
     if hasattr(pe, 'DIRECTORY_ENTRY_RESOURCE'):
@@ -110,6 +121,7 @@ def get_resources(pe):
     return resources
 
 
+# PE dosyasından versiyon bilgilerini çıkartır
 def get_version_info(pe):
     res = {}
     for fileinfo in pe.FileInfo:
@@ -131,11 +143,14 @@ def get_version_info(pe):
     return res
 
 
+# Verilen bir PE dosyasından tüm gerekli özellikleri çıkarır
 def extract_infos(fpath):
     res = []
-    res.append(os.path.basename(fpath))
-    res.append(get_md5(fpath))
+    res.append(os.path.basename(fpath))  # Dosya adı
+    res.append(get_md5(fpath))  # md5 hash
     pe = pefile.PE(fpath)
+
+    # PE Header bilgileri
     res.append(pe.FILE_HEADER.Machine)
     res.append(pe.FILE_HEADER.SizeOfOptionalHeader)
     res.append(pe.FILE_HEADER.Characteristics)
@@ -170,8 +185,11 @@ def extract_infos(fpath):
     res.append(pe.OPTIONAL_HEADER.SizeOfHeapCommit)
     res.append(pe.OPTIONAL_HEADER.LoaderFlags)
     res.append(pe.OPTIONAL_HEADER.NumberOfRvaAndSizes)
+
+    # Section sayısı ve istatistikleri
     res.append(len(pe.sections))
     entropy = list(map(lambda x: x.get_entropy(), pe.sections))
+    # Ortalama entropi
     res.append(sum(entropy)/len(entropy))
     res.append(min(entropy))
     res.append(max(entropy))
@@ -183,17 +201,24 @@ def extract_infos(fpath):
     res.append(sum(virtual_sizes)/len(virtual_sizes))
     res.append(min(virtual_sizes))
     res.append(max(virtual_sizes))
+
+    # Import/Export bilgileri
     try:
         res.append(len(pe.DIRECTORY_ENTRY_IMPORT))
         imports = sum([x.imports for x in pe.DIRECTORY_ENTRY_IMPORT], [])
         res.append(len(imports))
+        # ordinal import sayısı
         res.append(len([x for x in imports if x.name is None]))
     except AttributeError:
         res += [0, 0, 0]
+
     try:
+        # Export edilen semboller
         res.append(len(pe.DIRECTORY_ENTRY_EXPORT.symbols))
     except AttributeError:
         res.append(0)
+
+    # Resource bilgileri
     resources = get_resources(pe)
     res.append(len(resources))
     if resources:
@@ -205,6 +230,8 @@ def extract_infos(fpath):
         ]
     else:
         res += [0] * 6
+
+    # Load Config ve Version Info
     try:
         res.append(pe.DIRECTORY_ENTRY_LOAD_CONFIG.struct.Size)
     except AttributeError:
@@ -215,16 +242,17 @@ def extract_infos(fpath):
     except AttributeError:
         res.append(0)
 
-    # ✅ Ensure file handle is released before returning
+    # PE dosyasını kapat (bellek sızıntısını önlemek için)
     try:
-        pe.close()  # only available in newer versions
+        pe.close()
     except Exception:
         pass
+    del pe
 
-    del pe  # remove from memory
     return res
 
 
+# Belirli bir PE dosyasını tarar ve modeli kullanarak sonucu döner
 def scan_pe_file(file_path: str, model: MalwareModel):
     features = extract_infos(file_path)
     result = model.predict_from_features(features, COLUMNS)

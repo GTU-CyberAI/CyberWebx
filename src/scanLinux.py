@@ -25,7 +25,9 @@ COLUMNS = [
     "ResourcesMaxEntropy", "ResourcesMeanSize", "ResourcesMinSize",
     "ResourcesMaxSize", "LoadConfigurationSize", "VersionInformationSize"
 ]
-
+# get_md5 fonksiyonu, verilen dosya yolundaki dosyayı ikili (binary) modda açar
+# Dosyayı 4096 baytlık parçalar halinde okuyarak MD5 hash değerini hesaplar
+# Fonksiyon, hesaplanan hash'i hexadecimal formatta döndürür
 def get_md5(fname):
     hash_md5 = hashlib.md5()
     with open(fname, "rb") as f:
@@ -33,6 +35,9 @@ def get_md5(fname):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
+# get_entropy fonksiyonu, verilen veri (byte dizisi) üzerinde Shannon entropisini hesaplar
+# Veri içerisindeki her baytın frekansı belirlenir ve bu frekanslara göre entropi değeri hesaplanır
+# Fonksiyon, veri boşsa 0.0, aksi halde hesaplanan entropi değerini döndürür
 def get_entropy(data):
     if len(data) == 0:
         return 0.0
@@ -47,6 +52,10 @@ def get_entropy(data):
             entropy -= p_x*math.log(p_x, 2)
     return entropy
 
+# get_resources fonksiyonu, PE dosyasındaki kaynak (resources) bilgilerini toplar
+# PE dosyasının DIRECTORY_ENTRY_RESOURCE özelliği varsa, kaynak tipleri, ID'leri ve dil bazında tekrarlanan bilgiler alınır
+# Her bir kaynak için, verinin baytlarını elde eder, boyutunu alır ve entropi hesaplanır
+# Fonksiyon, her bir kaynağı [entropi, boyut] biçiminde bir liste olarak döndürür
 def get_resources(pe):
     resources = []
     if hasattr(pe, 'DIRECTORY_ENTRY_RESOURCE'):
@@ -65,6 +74,10 @@ def get_resources(pe):
             return resources
     return resources
 
+# get_version_info fonksiyonu, PE dosyasından sürüm bilgilerini ve sabit dosya bilgilerini toplar
+# FileInfo bölümündeki StringFileInfo ve VarFileInfo alt bölümlerinden metin ve değişken bilgilerini çıkarır
+# Ek olarak, VS_FIXEDFILEINFO yapısı varsa, burada yer alan dosya bayrakları, işletim sistemi, dosya türü ve sürüm numaraları gibi bilgileri de ekler
+# Fonksiyon, bu bilgileri anahtar-değer çiftleri şeklinde bir sözlük olarak döndürür
 def get_version_info(pe):
     res = {}
     for fileinfo in pe.FileInfo:
@@ -85,6 +98,13 @@ def get_version_info(pe):
         res['struct_version'] = pe.VS_FIXEDFILEINFO.StrucVersion
     return res
 
+# extract_infos fonksiyonu, verilen dosya yolundaki PE dosyası üzerinde çeşitli bilgileri çıkarır
+# Dosya ismi ve MD5 hash değeri ilk olarak elde edilir
+# PE dosyasının temel başlık (header) bilgileri, opsiyonel başlık değerleri ve section (bölüm) bilgileri toplanır
+# Section'ların entropileri, raw (ham) ve virtual boyut bilgileri hesaplanır
+# İçe aktarmalar (imports) ve dışa aktarımlar (exports) ile ilgili istatistikler, kaynak (resources) bilgileri de eklenir
+# Ek olarak, load configuration ve version bilgileri de çıkarılır
+# Fonksiyon, elde edilen tüm özellikleri belirlenen sütun sırasına uygun olarak bir liste şeklinde döndürür
 def extract_infos(fpath):
     res = []
     res.append(os.path.basename(fpath))
@@ -181,6 +201,9 @@ def extract_infos(fpath):
 
     return res
 
+# scan_pe_file fonksiyonu, belirtilen dosya yolundaki PE dosyasından çıkarılan özellikler ile
+# MalwareModel tipindeki modelin tahmin fonksiyonunu çağırır
+# Modelin çıktısına bağlı olarak dosya ismi ve tespit sonucunu içeren bir sözlük döndürür
 def scan_pe_file(file_path: str, model: MalwareModel):
     features = extract_infos(file_path)
     result = model.predict_from_features(features, COLUMNS)

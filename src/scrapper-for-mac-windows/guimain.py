@@ -7,6 +7,15 @@ from selenium.webdriver.common.keys import Keys
 import time
 from selenium.webdriver.chrome.options import Options
 
+# Tkinter ile bir masaüstü arayüz oluşturulur.
+# Kullanıcıdan LinkedIn, Twitter ve Instagram bilgilerini girmesi istenir.
+# "Bilgileri Topla" butonuna basıldığında `run_script` fonksiyonu çağrılır.
+# Arayüz 400x400 boyutunda sabitlenmiştir ve başlık atanmıştır.
+
+# GUI'den alınan LinkedIn, Twitter ve Instagram kullanıcı adlarıyla sosyal medya bilgilerini toplar.
+# LinkedIn ve Twitter verileri Selenium ile, Instagram verisi Instaloader ile çekilir.
+# Her platformdan alınan bilgiler metin olarak derlenip `social_media_report.txt` dosyasına yazılır.
+# İşlem sonunda kullanıcıya bir bilgilendirme mesajı gösterilir.
 def run_script():
     linkedin_username = "mens1studioo@gmail.com"
     linkedin_password = "Ahmet@123.!"
@@ -144,6 +153,13 @@ def run_script():
 
     messagebox.showinfo("Tamamlandı", "Bilgiler 'social_media_report.txt' dosyasına kaydedildi.")
 
+# LinkedIn'e giriş yaparak hedef profil bilgileri çekilir:
+# - İl / ilçe bilgisi
+# - Şu anki pozisyon
+# Ardından deneyim (experience) sayfasına gidilerek:
+# - Pozisyonlar, şirketler, süre, lokasyon, açıklama ve yetenekler (skills) gibi veriler alınır
+# Her bir iş deneyimi ayrı ayrı yorumlanır ve dosyaya yazılır.
+
 # GUI kurulum
 top = tk.Tk()
 top.title("Sosyal Medya Bilgi Toplayıcı")
@@ -153,13 +169,28 @@ tk.Label(top, text="LinkedIn Hedef Kullanıcı:").pack()
 entry_linkedin_target = tk.Entry(top, width=40)
 entry_linkedin_target.pack()
 
+# Twitter kullanıcı sayfasına giderek:
+# - İsim, biyografi, lokasyon, site, katılım tarihi
+# - Takipçi sayısı, takip edilen sayısı ve en son tweet alınır
+# Sayfadan gerekli elementler XPath veya CSS selector ile çekilir
+# Alınan bilgiler metin dosyasına aktarılır.
+
 tk.Label(top, text="Twitter Kullanıcı Adı:").pack()
 entry_twitter_user = tk.Entry(top, width=40)
 entry_twitter_user.pack()
 
+# Instaloader modülü kullanılarak hedef kullanıcının profil bilgileri çekilir:
+# - Kullanıcı adı, ad-soyad, biyografi, web sitesi
+# - Takipçi ve takip edilen sayısı, gönderi sayısı
+# Eğer profil özel veya bulunamazsa hata yakalanır ve kullanıcıya bildirilir.
+
 tk.Label(top, text="Instagram Kullanıcı Adı:").pack()
 entry_instagram_user = tk.Entry(top, width=40)
 entry_instagram_user.pack()
+
+# Toplanan tüm bilgiler `social_media_report.txt` adlı dosyaya UTF-8 formatında yazılır.
+# Dosya oluşturulduktan sonra kullanıcıya başarı mesajı verilir.
+# Eğer hiçbir giriş yapılmamışsa uyarı mesajı gösterilir.
 
 tk.Button(top, text="Bilgileri Topla", command=run_script).pack(pady=10)
 

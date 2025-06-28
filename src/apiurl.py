@@ -8,6 +8,7 @@ import time
 import pyfiglet
 import joblib
 
+# same as app.py but not ui
 def sanitization(web):
     web = web.lower()
     token = []
